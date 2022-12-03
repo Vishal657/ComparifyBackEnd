@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+var http = require('http');
 require('dotenv/config');
 
 app.use('/',bodyParser.json());
@@ -23,4 +24,5 @@ app.get('/', (_, res) => {
 });
 
 //How to start listening to server
-app.listen(3000);
+var server = app.listen(3000);
+server.setTimeout(500000);

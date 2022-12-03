@@ -1,17 +1,25 @@
-const puppeteer = require('puppeteer');
-
+const puppeteer = require('puppeteer-extra');
 
 async function scrapeProduct(url){
+
+    const stealthPlugin = require('puppeteer-extra-plugin-stealth')
+    puppeteer.use(stealthPlugin)
+
+    console.log("test 1")
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    console.log("test 2")
     await page.goto(url, {waitUntil: 'networkidle0'});
+    console.log("test 3")
 
-    var container = await page.evaluate(() => {
-        var titleNodeList = document.querySelectorAll(`.pCOS ._2PhD .UGUy`);
-        var priceNodeList = document.querySelectorAll(`.pCOS ._2bo3 ._1kMS span`);
-        var promoNodeList = document.querySelectorAll(`.pCOS ._3uwc ._2MEo`);
-        var imgNodeList = document.querySelectorAll(`._3WhJ ._3nWP img`);
-        var hrefNodeList = document.querySelectorAll(`._3WhJ ._8vVO`);
+    var container = await page.evaluate(() => { 
+        
+      //    page.evaluate(() => console.log('hello', 5, {foo: 'bar'}));
+        var titleNodeList = document.querySelectorAll(`.product-link`);
+        var priceNodeList = document.querySelectorAll(`.price`);
+        var promoNodeList = document.querySelectorAll(`.stars`);
+        var imgNodeList = document.querySelectorAll(`.img-link`);
+        var hrefNodeList = document.querySelectorAll(`.red-btn height-each-btn`);
         var titleLinkArray = [];
         var id = 0;
         if (promoNodeList.length == titleNodeList.length) {
@@ -25,7 +33,7 @@ async function scrapeProduct(url){
                         price: priceNodeList[i].innerHTML.trim().slice(26),
                         promo: promoNodeList[i].innerHTML.trim(),
                         image: imgNodeList[i].getAttribute("src"),
-                        href: "https://paytmmall.com"+hrefNodeList[i].getAttribute("href"),
+                        href: "https://bjs.com"+hrefNodeList[i].getAttribute("href"),
                         rating: 3
                     };
                 }
@@ -44,7 +52,7 @@ async function scrapeProduct(url){
                         title: titleNodeList[i].innerHTML.trim(),
                         price: priceNodeList[i].innerHTML.trim().slice(26),
                         image: imgNodeList[i].getAttribute("src"),
-                        href: "https://paytmmall.com"+hrefNodeList[i].getAttribute("href"),
+                        href: "https://bjs.com"+hrefNodeList[i].getAttribute("href"),
                         rating: 3
                     };
                 }
@@ -52,7 +60,7 @@ async function scrapeProduct(url){
             catch {
                 titleLinkArray = [];
             }
-        }
+        } console.log(titleLinkArray)
         return titleLinkArray;
     });
     await browser.close();
@@ -63,8 +71,9 @@ var paytm = async function (details) {
     details = details.trim();
     w_space = / /gi;
     details = details.replace(w_space,'%20');
-    new_url = 'https://paytmmall.com/shop/search?q='+details+'&from=organic&child_site_id=6';
+    new_url = 'https://www.bjs.com/search/tv/q?template=clp';
     //console.log(new_url);
+    //https://www.bjs.com/search/tv/q?template=clp
     var result = await scrapeProduct(new_url);
     return result;
 }
@@ -72,4 +81,3 @@ var paytm = async function (details) {
 module.exports ={
     paytm
 }
-

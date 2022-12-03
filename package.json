@@ -16,6 +16,8 @@
     "nodemon": "^2.0.2",
     "prompt-sync": "^4.2.0",
     "puppeteer": "^2.1.1",
+    "puppeteer-extra": "^3.3.4",
+    "puppeteer-extra-plugin-stealth": "^2.11.1",
     "request": "^2.88.2",
     "sort-json": "^2.0.0",
     "sort-json-array": "^0.1.7",
